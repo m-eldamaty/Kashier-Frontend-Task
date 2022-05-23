@@ -1,0 +1,335 @@
+<div class="main-layout">
+  <div class="container h-100">
+    <div class="row justify-content-between h-100">
+      <div class="col-md-5 col-sm-6 col-12">
+        <div class="mb-3">
+          <ng-select
+            #productsSelect
+            [items]="products$ | async"
+            bindLabel="text"
+            bindValue="value"
+            placeholder="Select or add new product"
+            loadingText="Loading "
+            [loading]="!productsLoaded"
+            [searchable]="false"
+            [(ngModel)]="selectedProductId"
+            (ngModelChange)="selectProductOption()"
+          >
+            <ng-template ng-header-tmp>
+              <input
+                class="form-control form-control-sm mb-2"
+                type="text"
+                (input)="productsSelect.filter($any($event.target).value)"
+              />
+
+              <div type="button" (click)="addNewProduct()" class="mb-2">
+                + Add new Product
+              </div>
+            </ng-template>
+
+            <ng-template ng-loadingspinner-tmp>
+              <div class="input-loader"></div>
+            </ng-template>
+          </ng-select>
+        </div>
+        <ng-container *ngIf="!loadingInProgress; else loaderTemplate">
+          <form
+            [formGroup]="newProductForm"
+            autocomplete="off"
+            (ngSubmit)="openModal(content)"
+            *ngIf="addingNewProduct"
+          >
+            <div class="mb-3">
+              <label class="control-label" for="name">Product Name </label>
+              <input
+                class="form-control"
+                placeholder="Name"
+                type="text"
+                name="name"
+                [formControlName]="productFormMetaData.productName"
+                [ngClass]="{
+                  'is-invalid':
+                    newProductForm.controls[productFormMetaData.productName]
+                      .errors &&
+                    newProductForm.controls[productFormMetaData.productName]
+                      .touched
+                }"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label
+                class="control-label"
+                [for]="productFormMetaData.productType"
+                >Product Type
+              </label>
+              <div>
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    [formControlName]="productFormMetaData.productType"
+                    value="type 1"
+                    id="type1"
+                  />
+                  <label class="form-check-label" for="type1"> Type 1 </label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    [formControlName]="productFormMetaData.productType"
+                    value="type 2"
+                    id="type2"
+                  />
+                  <label class="form-check-label" for="type2"> Type 2 </label>
+                </div>
+              </div>
+            </div>
+            <div class="mb-1">
+              <label class="control-label" for="category"
+                >Product Category
+              </label>
+              <input
+                class="form-control"
+                placeholder="Category"
+                name="category"
+                type="text"
+                [formControlName]="productFormMetaData.productCategory"
+                [ngClass]="{
+                  'is-invalid':
+                    newProductForm.controls[productFormMetaData.productCategory]
+                      .errors &&
+                    newProductForm.controls[productFormMetaData.productCategory]
+                      .touched
+                }"
+              />
+            </div>
+            <div class="mb-3">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  name="isSubCategory"
+                  [formControlName]="productFormMetaData.isSubCategory"
+                />
+                <label class="form-check-label" for="isSubCategory">
+                  This is a sub-category
+                </label>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <div class="row">
+                <div class="col-sm-6">
+                  <label class="control-label" for="reference"
+                    >Reference ID
+                    <span class="form-hint">(Optional)</span>
+                  </label>
+                  <input
+                    class="form-control"
+                    placeholder="ID"
+                    name="reference"
+                    type="text"
+                    autocomplete="new-referenceId"
+                    [formControlName]="productFormMetaData.referenceId"
+                    [ngClass]="{
+                      invalid:
+                        newProductForm.controls[productFormMetaData.referenceId]
+                          .errors
+                    }"
+                  />
+                  <div
+                    class="mt-1 text-danger"
+                    *ngIf="
+                newProductForm.controls[productFormMetaData.referenceId]
+                  .errors?.['pattern']"
+                  >
+                    Accepts numbers only
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <label class="control-label" for="password">Password </label>
+                  <div
+                    class="input-group"
+                    [ngClass]="{
+                      'border border-danger rounded':
+                        newProductForm.controls[productFormMetaData.password]
+                          .errors &&
+                        newProductForm.controls[productFormMetaData.password]
+                          .touched
+                    }"
+                  >
+                    <input
+                      class="form-control border-end-0"
+                      placeholder="password"
+                      name="password"
+                      [type]="showPassword ? 'text' : 'password'"
+                      [formControlName]="productFormMetaData.password"
+                      autocomplete="new-password"  
+                    />
+                    <span class="input-group-text border-start-0 bg-white" type="button" (click)="togglePassword()">
+                      <svg class="icon icon-xs" fill="#ebd76d">
+                        <use xlink:href="#icon-eye"></use>
+                      </svg>
+                    </span> 
+                  </div>
+                  <div
+                    class="mt-1 text-danger"
+                    *ngIf="
+                    newProductForm.controls[productFormMetaData.password]
+                      .errors?.['pattern'] &&
+                    newProductForm.controls[productFormMetaData.password]
+                      .touched
+                  "
+                  >
+                    Invalid Password Format
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <div class="row">
+                <div class="col-sm-6">
+                  <label class="control-label" for="deliveryFeesValue"
+                    >Delviery Fees
+                  </label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-white">EGP</span>
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="deliveryFeesValue"
+                      placeholder="Delivery Fees"
+                      [formControlName]="productFormMetaData.deliveryFeesValue"
+                      [ngClass]="{
+                        'is-invalid':
+                          newProductForm.controls[
+                            productFormMetaData.deliveryFeesValue
+                          ].errors &&
+                          newProductForm.controls[
+                            productFormMetaData.deliveryFeesValue
+                          ].touched
+                      }"
+                    />
+                  </div>
+                  <div
+                    class="mt-1 text-danger"
+                    *ngIf="
+                newProductForm.controls[productFormMetaData.deliveryFeesValue]
+                  .errors?.['pattern'] &&
+                newProductForm.controls[productFormMetaData.deliveryFeesValue]
+                  .touched
+              "
+                  >
+                    Accepts numbers only
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <label class="control-label" for="deliveryFeesPercent"
+                    >Delviery Fees
+                  </label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-white">%</span>
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="deliveryFeesPercent"
+                      placeholder="Delivery Fees"
+                      [formControlName]="
+                        productFormMetaData.deliveryFeesPercent
+                      "
+                      [ngClass]="{
+                        'is-invalid':
+                          newProductForm.controls[
+                            productFormMetaData.deliveryFeesPercent
+                          ].errors &&
+                          newProductForm.controls[
+                            productFormMetaData.deliveryFeesPercent
+                          ].touched
+                      }"
+                    />
+                  </div>
+                  <div
+                    class="mt-1 text-danger"
+                    *ngIf="
+                newProductForm.controls[productFormMetaData.deliveryFeesPercent]
+                  .errors?.['pattern'] &&
+                newProductForm.controls[productFormMetaData.deliveryFeesPercent]
+                  .touched
+              "
+                  >
+                    Accepts numbers only
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="mt-5 d-flex"
+              [ngClass]="[
+                selectedProductId != 0 && selectedProductId != null
+                  ? 'justify-content-between'
+                  : 'justify-content-end'
+              ]"
+            >
+              <div *ngIf="selectedProductId != 0 && selectedProductId != null">
+                <button
+                  class="btn btn-transparent px-0 text-danger"
+                  (click)="openModal(content); actionType = 'delete'"
+                  type="button"
+                >
+                  Delete
+                </button>
+              </div>
+              <div>
+                <button class="btn btn-transparent me-3 text-gray-600">
+                  Cancel
+                </button>
+                <button
+                  class="btn btn-primary"
+                  [disabled]="!newProductForm.valid"
+                  (click)="actionType = 'save'"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </form>
+        </ng-container>
+      </div>
+      <div class="col-md-5">
+        <div class="float-lg-end float-xxl-end floaf-md-end">
+          <ngb-toast
+            *ngIf="showToaster"
+            [autohide]="false"
+            (hidden)="closeToast()"
+            class="toast"
+            header=" "
+          >
+            <div>
+              <svg class="icon icon-xs" fill="#ebd76d">
+                <use xlink:href="#icon-check"></use>
+              </svg>
+              {{ toasterMessage }}
+            </div>
+          </ngb-toast>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #loaderTemplate>
+  <app-loader></app-loader>
+</ng-template>
+<ng-template #content role="document" let-modal>
+  <app-confrimation-modal
+    (save)="addUpdateProduct()"
+    (close)="closeModal()"
+    (delete)="deleteProduct(selectedProductId)"
+    [product]="newProductForm.value"
+    [actionType]="actionType"
+  ></app-confrimation-modal>
+</ng-template>

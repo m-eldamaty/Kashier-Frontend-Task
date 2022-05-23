@@ -1,0 +1,22 @@
+.toast {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row-reverse;
+  @include media-breakpoint-down(sm) {
+    width: 100%;
+  }
+}
+.toast-header {
+  border: none;
+  strong {
+    color: $gray-900;
+    font-weight: normal;
+  }
+}
+
+ngb-toast .toast-header .close {
+  border: none;
+  background: transparent;
+  font-size: 20px;
+}

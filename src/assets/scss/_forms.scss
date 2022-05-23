@@ -1,0 +1,36 @@
+.ng-select.ng-select-focused:not(.ng-select-opened) > .ng-select-container {
+  border-color: $primary;
+}
+.ng-dropdown-panel-items.scroll-host {
+  margin-right: 2px;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+  &::-webkit-scrollbar-track {
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: #ededed;
+  }
+}
+.control-label {
+  margin-bottom: 0.5rem;
+}
+.form-hint {
+  color: $gray-600;
+}
+.icon-xs {
+  height: 16px;
+  max-width: 20px;
+}
+.btn-primary,
+.btn-primary:disabled,
+.btn-primary.disabled, 
+.btn-primary:hover {
+  color: $white;
+}

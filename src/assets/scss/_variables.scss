@@ -1,0 +1,54 @@
+$primary: #00bcb4;
+$secondary:#fff;
+$gray-100: #f6f7fb;
+$gray-200: #d6d6d6;
+$gray-600: #828282;
+$gray-900: #3d3d3d;
+
+$input-focus-border-color:$primary;
+$component-active-color:$primary;
+$form-check-input-checked-bg-color:$primary;
+$input-btn-focus-box-shadow:none;
+
+$body-bg: $gray-100;
+$body-color: $gray-900;
+$input-color: $gray-900;
+$input-placeholder-color: $gray-600;
+$input-focus-box-shadow:none;
+$btn-focus-box-shadow:none;
+$btn-close-focus-shadow:none;
+$enable-shadows:false;
+
+// $form-check-input-bg:                     $input-bg;
+// $form-check-input-border:                 1px solid rgba($black, .25);
+// $form-check-input-border-radius:          .25em;
+// $form-check-radio-border-radius:          50%;
+// $form-check-input-focus-border:           $input-focus-border-color;
+// $form-check-input-focus-box-shadow:       $input-btn-focus-box-shadow;
+
+// $form-check-input-checked-color:          $component-active-color;
+// $form-check-input-checked-bg-color:       $component-active-bg;
+// $form-check-input-checked-border-color:   $form-check-input-checked-bg-color;
+
+$theme-colors: (
+  "primary":    $primary,
+  "secondary":  $secondary,
+  "success":    $success,
+  "info":       $info,
+  "warning":    $warning,
+  "danger":     $danger,
+  "light":      $light,
+  "dark":       $dark,
+  "white":$white,
+);
+$grays: (
+  "100": $gray-100,
+  "200": $gray-200,
+  "300": $gray-300,
+  "400": $gray-400,
+  "500": $gray-500,
+  "600": $gray-600,
+  "700": $gray-700,
+  "800": $gray-800,
+  "900": $gray-900
+) 

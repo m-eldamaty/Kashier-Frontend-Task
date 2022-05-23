@@ -1,0 +1,41 @@
+<ng-container *ngIf="actionType == 'save'; else deleteModal">
+  <div class="modal-header modal-header border-0">
+    <h4 class="modal-title">Save Changes?</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="closeModal()"
+    ></button>
+  </div>
+  <div class="modal-body pt-0">
+    Are you sure you want to save changes made?
+    <div class="modal-footer border-0 pt-4">
+      <div>
+        <button class="btn btn-transparent me-3 text-gray-600" type="button" (click)="closeModal()">Discard</button>
+        <button class="btn btn-primary" (click)="saveProduct()">Save</button>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #deleteModal>
+    <div class="modal-header modal-header border-0">
+        <h4 class="modal-title">Delete "{{product.productName}}"?</h4>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="closeModal()"
+        ></button>
+      </div>
+      <div class="modal-body pt-0">
+        Are you sure you want to delete product? Once deleted, you won't be able to access it again.
+        <div class="modal-footer border-0 pt-4">
+          <div>
+            <button class="btn btn-transparent me-3 text-gray-600"  type="button" (click)="closeModal()">Discard</button>
+            <button class="btn btn-danger" (click)="deleteProduct()">Delete</button>
+          </div>
+        </div>
+      </div>
+</ng-template>
